@@ -24,6 +24,10 @@ class Config {
 		return this.getInstance().isTest();
 	}
 
+	public static getEnvironmentType(): EnvironmentType {
+		return this.getInstance().getEnvironmentType();
+	}
+
 	public static getManagerPort(): number {
 		return this.getInstance().getManagerPort();
 	}
@@ -52,7 +56,7 @@ class Config {
 		return process.pid;
 	}
 
-	private getEnvironmentType(): EnvironmentType {
+	public getEnvironmentType(): EnvironmentType {
 		switch (process.env.NODE_ENV) {
 			case 'development':
 				return EnvironmentType.DEVELOPMENT;
