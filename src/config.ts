@@ -24,6 +24,10 @@ class Config {
 		return this.getInstance().isTest();
 	}
 
+	public static getManagerPort(): number {
+		return this.getInstance().getManagerPort();
+	}
+
 	public isDevelopment(): boolean {
 		return this.getEnvironmentType() === EnvironmentType.DEVELOPMENT;
 	}
@@ -34,6 +38,10 @@ class Config {
 
 	public isTest(): boolean {
 		return this.getEnvironmentType() === EnvironmentType.TEST;
+	}
+
+	public getManagerPort(): number {
+		return 3000;
 	}
 
 	private getEnvironmentType(): EnvironmentType {

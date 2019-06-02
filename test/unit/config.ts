@@ -51,3 +51,10 @@ Tap.test('.isTest() returns expected value when in test environment', test => {
 
 	test.end();
 });
+
+Tap.test('.getManagerPort() returns expected port value', test => {
+	const port = (new Config()).getManagerPort();
+
+	test.equals(port, 3000);
+	test.end();
+});
