@@ -58,3 +58,10 @@ Tap.test('.getManagerPort() returns expected port value', test => {
 	test.equals(port, 3000);
 	test.end();
 });
+
+Tap.test('.getProcessId() returns expected pid value', test => {
+	const processId = (new Config()).getProcessId();
+
+	test.equals(processId, process.pid);
+	test.end();
+});

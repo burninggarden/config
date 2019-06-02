@@ -28,6 +28,10 @@ class Config {
 		return this.getInstance().getManagerPort();
 	}
 
+	public static getProcessId(): number {
+		return this.getInstance().getProcessId();
+	}
+
 	public isDevelopment(): boolean {
 		return this.getEnvironmentType() === EnvironmentType.DEVELOPMENT;
 	}
@@ -42,6 +46,10 @@ class Config {
 
 	public getManagerPort(): number {
 		return 3000;
+	}
+
+	public getProcessId(): number {
+		return process.pid;
 	}
 
 	private getEnvironmentType(): EnvironmentType {
