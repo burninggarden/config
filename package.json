@@ -1,7 +1,7 @@
 {
 	"name": "@burninggarden/botanist",
 	"description": "Development project and server manager",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"private": false,
 	"author": "Burning Garden",
 	"homepage": "https://burninggarden.com",
