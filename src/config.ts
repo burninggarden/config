@@ -32,6 +32,10 @@ class Config {
 		return this.getInstance().getManagerPort();
 	}
 
+	public static getHttpsPort(): number {
+		return this.getInstance().getHttpsPort();
+	}
+
 	public static getProcessId(): number {
 		return this.getInstance().getProcessId();
 	}
@@ -58,6 +62,10 @@ class Config {
 
 	public getManagerPort(): number {
 		return 3000;
+	}
+
+	public getHttpsPort(): number {
+		return 8080;
 	}
 
 	public getProcessId(): number {

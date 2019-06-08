@@ -117,6 +117,22 @@ Tap.test('.getManagerPort()', suite => {
 	suite.end();
 });
 
+Tap.test('.getHttpsPort()', suite => {
+	suite.test('returns expected port value', test => {
+		const port = (new Config()).getHttpsPort();
+
+		test.equals(port, 8080);
+		test.end();
+	});
+
+	suite.test('is aliased as static method', test => {
+		test.equals(Config.getHttpsPort(), (new Config()).getHttpsPort());
+		test.end();
+	});
+
+	suite.end();
+});
+
 Tap.test('.getProcessId()', suite => {
 	suite.test('returns expected pid value', test => {
 		const processId = (new Config()).getProcessId();
