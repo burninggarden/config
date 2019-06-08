@@ -132,3 +132,35 @@ Tap.test('.getProcessId()', suite => {
 
 	suite.end();
 });
+
+Tap.test('.getUid()', suite => {
+	suite.test('returns expected uid value', test => {
+		const uid = (new Config()).getUid();
+
+		test.equals(uid, process.getuid());
+		test.end();
+	});
+
+	suite.test('is aliased as static method', test => {
+		test.equals(Config.getUid(), (new Config()).getUid());
+		test.end();
+	});
+
+	suite.end();
+});
+
+Tap.test('.getGid()', suite => {
+	suite.test('returns expected gid value', test => {
+		const gid = (new Config()).getGid();
+
+		test.equals(gid, process.getgid());
+		test.end();
+	});
+
+	suite.test('is aliased as static method', test => {
+		test.equals(Config.getGid(), (new Config()).getGid());
+		test.end();
+	});
+
+	suite.end();
+});

@@ -36,6 +36,14 @@ class Config {
 		return this.getInstance().getProcessId();
 	}
 
+	public static getUid(): number {
+		return this.getInstance().getUid();
+	}
+
+	public static getGid(): number {
+		return this.getInstance().getGid();
+	}
+
 	public isDevelopment(): boolean {
 		return this.getEnvironmentType() === EnvironmentType.DEVELOPMENT;
 	}
@@ -54,6 +62,14 @@ class Config {
 
 	public getProcessId(): number {
 		return process.pid;
+	}
+
+	public getUid(): number {
+		return process.getuid();
+	}
+
+	public getGid(): number {
+		return process.getgid();
 	}
 
 	public getEnvironmentType(): EnvironmentType {
