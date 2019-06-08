@@ -8,22 +8,22 @@
 	"repository": "https://github.com/burninggarden/config",
 	"main": "./dist/src/index.js",
 	"dependencies": {
-		"@burninggarden/enums": "0.0.3",
+		"@burninggarden/enums": "0.0.10",
 		"@burninggarden/environment-mocker": "0.0.4",
 		"@types/node": "10.9.4",
-		"tap": "^12.6.1",
 		"typescript": "3.2.1"
 	},
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "^1.5.0",
 		"@typescript-eslint/parser": "^1.5.0",
-		"eslint": "^5.15.3"
+		"eslint": "^5.15.3",
+		"tap": "14.2.2"
 	},
 	"scripts": {
-		"install": "./bin/install",
-		"test": "./bin/test",
-		"lint": "./bin/lint",
-		"preversion": "./bin/preversion",
+		"install":     "./bin/install",
+		"test":        "./bin/test",
+		"lint":        "./bin/lint",
+		"preversion":  "./bin/preversion",
 		"postversion": "./bin/postversion"
 	}
 }

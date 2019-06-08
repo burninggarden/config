@@ -1,5 +1,7 @@
+import OS                from 'os';
 import Tap               from 'tap';
 import Config            from 'config';
+import SettingsFactory   from 'factories/settings';
 import {EnvironmentType} from '@burninggarden/enums';
 import EnvironmentMocker from '@burninggarden/environment-mocker';
 
@@ -80,11 +82,43 @@ Tap.test('.isTest()', suite => {
 });
 
 Tap.test('.getEnvironmentType()', suite => {
-	suite.test('returns expected environment type', test => {
+	suite.test('returns expected environment type for production', test => {
 		EnvironmentMocker.mock(EnvironmentType.PRODUCTION, () => {
 			const environmentType = (new Config()).getEnvironmentType();
 
 			test.equals(environmentType, EnvironmentType.PRODUCTION);
+			test.end();
+		});
+	});
+
+	suite.test('returns expected environment type for test', test => {
+		EnvironmentMocker.mock(EnvironmentType.TEST, () => {
+			const environmentType = (new Config()).getEnvironmentType();
+
+			test.equals(environmentType, EnvironmentType.TEST);
+			test.end();
+		});
+	});
+
+	suite.test('returns expected environment type for development', test => {
+		EnvironmentMocker.mock(EnvironmentType.DEVELOPMENT, () => {
+			const environmentType = (new Config()).getEnvironmentType();
+
+			test.equals(environmentType, EnvironmentType.DEVELOPMENT);
+			test.end();
+		});
+	});
+
+	suite.test('throws an exception for other environment values', test => {
+		const environment = 'nonsense';
+
+		EnvironmentMocker.mock(environment as EnvironmentType, () => {
+			const config = new Config()
+
+			test.throws(() => {
+				config.getEnvironmentType();
+			}, /Unsupported environment type: nonsense/);
+
 			test.end();
 		});
 	});
@@ -175,6 +209,48 @@ Tap.test('.getGid()', suite => {
 
 	suite.test('is aliased as static method', test => {
 		test.equals(Config.getGid(), (new Config()).getGid());
+		test.end();
+	});
+
+	suite.end();
+});
+
+Tap.test('.getTempDirectoryPath()', suite => {
+	suite.test('returns expected value', test => {
+		const config = new Config();
+		const homedir = config.getHomeDirectoryPath();
+		const settingsFilepath = homedir + '/.burninggarden/settings.json';
+		const settingsFactory = new SettingsFactory(settingsFilepath);
+		const settings = settingsFactory.buildSettings();
+
+		test.equal(config.getTempDirectoryPath(), settings.tempDirectoryPath);
+		test.end();
+	});
+
+	suite.test('is aliased as a static method', test => {
+		test.equals(
+			Config.getTempDirectoryPath(),
+			(new Config()).getTempDirectoryPath()
+		);
+		test.end();
+	});
+
+	suite.end();
+});
+
+Tap.test('.getHomeDirectoryPath()', suite => {
+	suite.test('returns expected gid value', test => {
+		const path = (new Config()).getHomeDirectoryPath();
+
+		test.equals(path, OS.homedir());
+		test.end();
+	});
+
+	suite.test('is aliased as static method', test => {
+		test.equals(
+			Config.getHomeDirectoryPath(),
+			(new Config()).getHomeDirectoryPath()
+		);
 		test.end();
 	});
 

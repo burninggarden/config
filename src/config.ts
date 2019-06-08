@@ -1,8 +1,13 @@
+import OS                from 'os';
+import Settings          from 'interfaces/settings';
 import {EnvironmentType} from '@burninggarden/enums';
+import SettingsFactory   from 'factories/settings';
 
 let CACHED_INSTANCE: Config | null = null;
 
 class Config {
+
+	private settings: Settings;
 
 	public static getInstance(): Config {
 		if (CACHED_INSTANCE === null) {
@@ -48,6 +53,14 @@ class Config {
 		return this.getInstance().getGid();
 	}
 
+	public static getTempDirectoryPath(): string {
+		return this.getInstance().getTempDirectoryPath();
+	}
+
+	public static getHomeDirectoryPath(): string {
+		return this.getInstance().getHomeDirectoryPath();
+	}
+
 	public isDevelopment(): boolean {
 		return this.getEnvironmentType() === EnvironmentType.DEVELOPMENT;
 	}
@@ -90,9 +103,34 @@ class Config {
 				return EnvironmentType.TEST;
 			default:
 				throw new Error(
-					`Unsupported environment type set: ${process.env.NODE_ENV}`
+					`Unsupported environment type: ${process.env.NODE_ENV}`
 				);
 		}
+	}
+
+	public getTempDirectoryPath(): string {
+		return this.getSettings().tempDirectoryPath;
+	}
+
+	public getHomeDirectoryPath(): string {
+		return OS.homedir();
+	}
+
+	private getSettings(): Settings {
+		if (!this.settings) {
+			this.settings = this.buildSettings();
+		}
+
+		return this.settings;
+	}
+
+	private buildSettings(): Settings {
+		const
+			directoryPath = this.getHomeDirectoryPath(),
+			filepath      = directoryPath + '/.burninggarden/settings.json',
+			factory       = new SettingsFactory(filepath);
+
+		return factory.buildSettings();
 	}
 
 }
