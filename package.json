@@ -1,7 +1,7 @@
 {
 	"name": "@burninggarden/config",
 	"description": "A library for sharing config values across modules",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"private": false,
 	"author": "Burning Garden",
 	"homepage": "https://burninggarden.com",
