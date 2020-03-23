@@ -1,14 +1,11 @@
-import OS                from 'os';
-import Settings          from 'interfaces/settings';
-import {EnvironmentType} from '@burninggarden/enums';
-import SettingsFactory   from 'factories/settings';
+import OS from 'os';
+import Settings from 'interfaces/settings';
+import { EnvironmentType } from '@burninggarden/enums';
+import SettingsFactory from 'factories/settings';
 
 let CACHED_INSTANCE: Config | null = null;
 
 class Config {
-
-	private settings: Settings;
-
 	public static getInstance(): Config {
 		if (CACHED_INSTANCE === null) {
 			CACHED_INSTANCE = new this();
@@ -61,6 +58,8 @@ class Config {
 		return this.getInstance().getHomeDirectoryPath();
 	}
 
+	private settings: Settings | undefined;
+
 	public isDevelopment(): boolean {
 		return this.getEnvironmentType() === EnvironmentType.DEVELOPMENT;
 	}
@@ -71,6 +70,10 @@ class Config {
 
 	public isTest(): boolean {
 		return this.getEnvironmentType() === EnvironmentType.TEST;
+	}
+
+	public isBrowser(): boolean {
+		return typeof window !== 'undefined';
 	}
 
 	public getManagerPort(): number {
@@ -117,7 +120,7 @@ class Config {
 	}
 
 	private getSettings(): Settings {
-		if (!this.settings) {
+		if (this.settings === undefined) {
 			this.settings = this.buildSettings();
 		}
 
@@ -125,14 +128,12 @@ class Config {
 	}
 
 	private buildSettings(): Settings {
-		const
-			directoryPath = this.getHomeDirectoryPath(),
-			filepath      = directoryPath + '/.burninggarden/settings.json',
-			factory       = new SettingsFactory(filepath);
+		const directoryPath = this.getHomeDirectoryPath(),
+			filepath = directoryPath + '/.burninggarden/settings.json',
+			factory = new SettingsFactory(filepath);
 
 		return factory.buildSettings();
 	}
-
 }
 
 export default Config;

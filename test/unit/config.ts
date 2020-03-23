@@ -1,258 +1,221 @@
-import OS                from 'os';
-import Tap               from 'tap';
-import Config            from 'config';
-import SettingsFactory   from 'factories/settings';
-import {EnvironmentType} from '@burninggarden/enums';
+import OS from 'os';
+import Config from 'config';
+import SettingsFactory from 'factories/settings';
+import { EnvironmentType } from '@burninggarden/enums';
 import EnvironmentMocker from '@burninggarden/environment-mocker';
 
-
-Tap.test('.isDevelopment()', suite => {
-	suite.test('returns expected value when not in development environment', test => {
-		EnvironmentMocker.mock(EnvironmentType.PRODUCTION, () => {
-			test.notOk((new Config()).isDevelopment());
+describe('Config', () => {
+	describe('.isDevelopment()', () => {
+		it('returns expected value when not in development environment', () => {
+			EnvironmentMocker.mock(EnvironmentType.PRODUCTION, () => {
+				expect(new Config().isDevelopment()).toBe(false);
+			});
 		});
 
-		test.end();
-	});
-
-	suite.test('returns expected value when in development environment', test => {
-		EnvironmentMocker.mock(EnvironmentType.DEVELOPMENT, () => {
-			test.ok((new Config()).isDevelopment());
+		it('returns expected value when in development environment', () => {
+			EnvironmentMocker.mock(EnvironmentType.DEVELOPMENT, () => {
+				expect(new Config().isDevelopment()).toBe(true);
+			});
 		});
 
-		test.end();
-	});
-
-	suite.test('is aliased as static method', test => {
-		test.equals(Config.isDevelopment(), (new Config()).isDevelopment());
-		test.end();
-	});
-
-	suite.end();
-});
-
-Tap.test('.isProduction()', suite => {
-	suite.test('returns expected value when not in production environment', test => {
-		EnvironmentMocker.mock(EnvironmentType.DEVELOPMENT, () => {
-			test.notOk((new Config()).isProduction());
-		});
-
-		test.end();
-	});
-
-	suite.test('returns expected value when in production environment', test => {
-		EnvironmentMocker.mock(EnvironmentType.PRODUCTION, () => {
-			test.ok((new Config()).isProduction());
-		});
-
-		test.end();
-	});
-
-	suite.test('is aliased as static method', test => {
-		test.equals(Config.isProduction(), (new Config()).isProduction());
-		test.end();
-	});
-
-	suite.end();
-});
-
-Tap.test('.isTest()', suite => {
-	suite.test('returns expected value when not in test environment', test => {
-		EnvironmentMocker.mock(EnvironmentType.DEVELOPMENT, () => {
-			test.notOk((new Config()).isTest());
-		});
-
-		test.end();
-	});
-
-	suite.test('returns expected value when in test environment', test => {
-		EnvironmentMocker.mock(EnvironmentType.TEST, () => {
-			test.ok((new Config()).isTest());
-		});
-
-		test.end();
-	});
-
-	suite.test('is aliased as static method', test => {
-		test.equals(Config.isTest(), (new Config()).isTest());
-		test.end();
-	});
-
-	suite.end();
-});
-
-Tap.test('.getEnvironmentType()', suite => {
-	suite.test('returns expected environment type for production', test => {
-		EnvironmentMocker.mock(EnvironmentType.PRODUCTION, () => {
-			const environmentType = (new Config()).getEnvironmentType();
-
-			test.equals(environmentType, EnvironmentType.PRODUCTION);
-			test.end();
+		it('is aliased as static method', () => {
+			expect(Config.isDevelopment()).toBe(false);
 		});
 	});
 
-	suite.test('returns expected environment type for test', test => {
-		EnvironmentMocker.mock(EnvironmentType.TEST, () => {
-			const environmentType = (new Config()).getEnvironmentType();
+	describe('.isProduction()', () => {
+		it('returns expected value when not in production environment', () => {
+			EnvironmentMocker.mock(EnvironmentType.DEVELOPMENT, () => {
+				expect(new Config().isProduction()).toBe(false);
+			});
+		});
 
-			test.equals(environmentType, EnvironmentType.TEST);
-			test.end();
+		it('returns expected value when in production environment', () => {
+			EnvironmentMocker.mock(EnvironmentType.PRODUCTION, () => {
+				expect(new Config().isProduction()).toBe(true);
+			});
+		});
+
+		it('is aliased as static method', () => {
+			expect(Config.isProduction()).toBe(false);
 		});
 	});
 
-	suite.test('returns expected environment type for development', test => {
-		EnvironmentMocker.mock(EnvironmentType.DEVELOPMENT, () => {
-			const environmentType = (new Config()).getEnvironmentType();
+	describe('.isTest()', () => {
+		it('returns expected value when not in test environment', () => {
+			EnvironmentMocker.mock(EnvironmentType.DEVELOPMENT, () => {
+				expect(new Config().isTest()).toBe(false);
+			});
+		});
 
-			test.equals(environmentType, EnvironmentType.DEVELOPMENT);
-			test.end();
+		it('returns expected value when in test environment', () => {
+			EnvironmentMocker.mock(EnvironmentType.TEST, () => {
+				expect(new Config().isTest()).toBe(true);
+			});
+		});
+
+		it('is aliased as static method', () => {
+			expect(Config.isTest()).toBe(true);
 		});
 	});
 
-	suite.test('throws an exception for other environment values', test => {
-		const environment = 'nonsense';
+	describe('.getEnvironmentType()', () => {
+		it('returns expected environment type for production', () => {
+			EnvironmentMocker.mock(EnvironmentType.PRODUCTION, () => {
+				const environmentType = new Config().getEnvironmentType();
 
-		EnvironmentMocker.mock(environment as EnvironmentType, () => {
-			const config = new Config()
+				expect(environmentType).toStrictEqual(EnvironmentType.PRODUCTION);
+			});
+		});
 
-			test.throws(() => {
-				config.getEnvironmentType();
-			}, /Unsupported environment type: nonsense/);
+		it('returns expected environment type for test', () => {
+			EnvironmentMocker.mock(EnvironmentType.TEST, () => {
+				const environmentType = new Config().getEnvironmentType();
 
-			test.end();
+				expect(environmentType).toStrictEqual(EnvironmentType.TEST);
+			});
+		});
+
+		it('returns expected environment type for development', () => {
+			EnvironmentMocker.mock(EnvironmentType.DEVELOPMENT, () => {
+				const environmentType = new Config().getEnvironmentType();
+
+				expect(environmentType).toStrictEqual(EnvironmentType.DEVELOPMENT);
+			});
+		});
+
+		it('throws an exception for other environment values', () => {
+			const environment = 'nonsense';
+
+			EnvironmentMocker.mock(environment as EnvironmentType, () => {
+				const config = new Config();
+
+				expect(() => {
+					config.getEnvironmentType();
+				}).toThrow('Unsupported environment type: nonsense');
+			});
+		});
+
+		it('is aliased as static method', () => {
+			expect(Config.getEnvironmentType()).toStrictEqual(EnvironmentType.TEST);
 		});
 	});
 
-	suite.test('is aliased as static method', test => {
-		test.equals(
-			Config.getEnvironmentType(),
-			(new Config()).getEnvironmentType()
-		);
+	describe('.getManagerPort()', () => {
+		it('returns expected port value', () => {
+			const port = new Config().getManagerPort();
 
-		test.end();
+			expect(port).toStrictEqual(3000);
+		});
+
+		it('is aliased as static method', () => {
+			expect(Config.getManagerPort()).toStrictEqual(
+				new Config().getManagerPort()
+			);
+		});
 	});
 
-	suite.end();
-});
+	describe('.getHttpsPort()', () => {
+		it('returns expected port value', () => {
+			const port = new Config().getHttpsPort();
 
-Tap.test('.getManagerPort()', suite => {
-	suite.test('returns expected port value', test => {
-		const port = (new Config()).getManagerPort();
+			expect(port).toStrictEqual(8080);
+		});
 
-		test.equals(port, 3000);
-		test.end();
+		it('is aliased as static method', () => {
+			expect(Config.getHttpsPort()).toStrictEqual(new Config().getHttpsPort());
+		});
 	});
 
-	suite.test('is aliased as static method', test => {
-		test.equals(Config.getManagerPort(), (new Config()).getManagerPort());
-		test.end();
+	describe('.getProcessId()', () => {
+		it('returns expected pid value', () => {
+			const processId = new Config().getProcessId();
+
+			expect(processId).toStrictEqual(process.pid);
+		});
+
+		it('is aliased as static method', () => {
+			expect(Config.getProcessId()).toStrictEqual(process.pid);
+		});
 	});
 
-	suite.end();
-});
+	describe('.getUid()', () => {
+		it('returns expected uid value', () => {
+			const uid = new Config().getUid();
 
-Tap.test('.getHttpsPort()', suite => {
-	suite.test('returns expected port value', test => {
-		const port = (new Config()).getHttpsPort();
+			expect(uid).toStrictEqual(process.getuid());
+		});
 
-		test.equals(port, 8080);
-		test.end();
+		it('is aliased as static method', () => {
+			expect(Config.getUid()).toStrictEqual(process.getuid());
+		});
 	});
 
-	suite.test('is aliased as static method', test => {
-		test.equals(Config.getHttpsPort(), (new Config()).getHttpsPort());
-		test.end();
+	describe('.getGid()', () => {
+		it('returns expected gid value', () => {
+			const gid = new Config().getGid();
+
+			expect(gid).toStrictEqual(process.getgid());
+		});
+
+		it('is aliased as static method', () => {
+			expect(Config.getGid()).toStrictEqual(new Config().getGid());
+		});
 	});
 
-	suite.end();
-});
+	describe('.getTempDirectoryPath()', () => {
+		it('returns expected value', () => {
+			const config = new Config();
+			const homedir = config.getHomeDirectoryPath();
+			const settingsFilepath = homedir + '/.burninggarden/settings.json';
+			const settingsFactory = new SettingsFactory(settingsFilepath);
+			const settings = settingsFactory.buildSettings();
 
-Tap.test('.getProcessId()', suite => {
-	suite.test('returns expected pid value', test => {
-		const processId = (new Config()).getProcessId();
+			expect(config.getTempDirectoryPath()).toStrictEqual(
+				settings.tempDirectoryPath
+			);
+		});
 
-		test.equals(processId, process.pid);
-		test.end();
+		it('is aliased as a static method', () => {
+			expect(Config.getTempDirectoryPath()).toStrictEqual(
+				new Config().getTempDirectoryPath()
+			);
+		});
 	});
 
-	suite.test('is aliased as static method', test => {
-		test.equals(Config.getProcessId(), (new Config()).getProcessId());
-		test.end();
+	describe('.getHomeDirectoryPath()', () => {
+		it('returns expected gid value', () => {
+			const path = new Config().getHomeDirectoryPath();
+
+			expect(path).toStrictEqual(OS.homedir());
+		});
+
+		it('is aliased as static method', () => {
+			expect(Config.getHomeDirectoryPath()).toStrictEqual(
+				new Config().getHomeDirectoryPath()
+			);
+		});
 	});
 
-	suite.end();
-});
+	describe('.isBrowser()', () => {
+		it('returns true when window is defined', () => {
+			const config = new Config();
 
-Tap.test('.getUid()', suite => {
-	suite.test('returns expected uid value', test => {
-		const uid = (new Config()).getUid();
+			Object.assign(global, {
+				window: {},
+			});
 
-		test.equals(uid, process.getuid());
-		test.end();
+			expect(config.isBrowser()).toBe(true);
+
+			Object.assign(global, {
+				window: undefined,
+			});
+		});
+
+		it('returns false when window is not defined', () => {
+			const config = new Config();
+
+			expect(config.isBrowser()).toBe(false);
+		});
 	});
-
-	suite.test('is aliased as static method', test => {
-		test.equals(Config.getUid(), (new Config()).getUid());
-		test.end();
-	});
-
-	suite.end();
-});
-
-Tap.test('.getGid()', suite => {
-	suite.test('returns expected gid value', test => {
-		const gid = (new Config()).getGid();
-
-		test.equals(gid, process.getgid());
-		test.end();
-	});
-
-	suite.test('is aliased as static method', test => {
-		test.equals(Config.getGid(), (new Config()).getGid());
-		test.end();
-	});
-
-	suite.end();
-});
-
-Tap.test('.getTempDirectoryPath()', suite => {
-	suite.test('returns expected value', test => {
-		const config = new Config();
-		const homedir = config.getHomeDirectoryPath();
-		const settingsFilepath = homedir + '/.burninggarden/settings.json';
-		const settingsFactory = new SettingsFactory(settingsFilepath);
-		const settings = settingsFactory.buildSettings();
-
-		test.equal(config.getTempDirectoryPath(), settings.tempDirectoryPath);
-		test.end();
-	});
-
-	suite.test('is aliased as a static method', test => {
-		test.equals(
-			Config.getTempDirectoryPath(),
-			(new Config()).getTempDirectoryPath()
-		);
-		test.end();
-	});
-
-	suite.end();
-});
-
-Tap.test('.getHomeDirectoryPath()', suite => {
-	suite.test('returns expected gid value', test => {
-		const path = (new Config()).getHomeDirectoryPath();
-
-		test.equals(path, OS.homedir());
-		test.end();
-	});
-
-	suite.test('is aliased as static method', test => {
-		test.equals(
-			Config.getHomeDirectoryPath(),
-			(new Config()).getHomeDirectoryPath()
-		);
-		test.end();
-	});
-
-	suite.end();
 });

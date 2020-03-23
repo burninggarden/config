@@ -1,12 +1,11 @@
-import FS             from 'fs';
-import Settings       from 'interfaces/settings';
-import MysqlSettings  from 'interfaces/settings/mysql';
-import {FileEncoding} from '@burninggarden/enums';
+import FS from 'fs';
+import Settings from 'interfaces/settings';
+import MysqlSettings from 'interfaces/settings/mysql';
+import { FileEncoding } from '@burninggarden/enums';
 
 class SettingsFactory {
-
-	private filepath     : string;
-	private fileContents : Settings;
+	private filepath: string;
+	private fileContents: Settings | undefined;
 
 	public constructor(filepath: string) {
 		this.filepath = filepath;
@@ -15,7 +14,7 @@ class SettingsFactory {
 	public buildSettings(): Settings {
 		return {
 			tempDirectoryPath: this.buildTempDirectoryPath(),
-			mysql:             this.buildMysqlSettings()
+			mysql: this.buildMysqlSettings(),
 		};
 	}
 
@@ -34,13 +33,13 @@ class SettingsFactory {
 			username: 'bgdev',
 			hostname: 'localhost',
 			password: 'balrog',
-			port:     3306,
-			...this.getFileContents().mysql
+			port: 3306,
+			...this.getFileContents().mysql,
 		};
 	}
 
 	private getFileContents(): Settings {
-		if (!this.fileContents) {
+		if (this.fileContents === undefined) {
 			this.fileContents = this.readFileContents();
 		}
 
@@ -62,7 +61,6 @@ class SettingsFactory {
 	private getFilepath(): string {
 		return this.filepath;
 	}
-
 }
 
 export default SettingsFactory;
